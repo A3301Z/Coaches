@@ -1,7 +1,9 @@
 package Coaches.Models;
 
+import java.time.LocalDate;
+
 public class CoachDto extends CoachMinimalDto {
     public String Email;
-    public String Birthday;
+    public LocalDate Birthday;
     public String PhoneNumber;
 }

@@ -4,33 +4,29 @@ import Coaches.Entity.Coach;
 import Coaches.Models.CoachDto;
 import Coaches.Models.CoachMinimalDto;
 import Coaches.Services.CoachesServices;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
-@Api(tags = "Описание работы REST функционала.")
 public class CoachController {
     @Autowired
     private CoachesServices services;
 
     @GetMapping("/all-coaches")
-    @ApiOperation("Получение краткой информации о всех тренерах.")
     public List<CoachMinimalDto> getAllCoaches() {
         List<CoachMinimalDto> result = new ArrayList<>();
 
         for (Coach it : services.getAllCoaches()) {
             CoachMinimalDto dto = new CoachMinimalDto();
             dto.Id = it.getId();
-            dto.FirstName = it.getFirstName();
-            dto.SecondName = it.getSecondName();
+            dto.Firstname = it.getFirstname();
+            dto.Secondname = it.getSecondname();
+            dto.Age = it.getAge();
+            dto.Archived = it.getArchivedStatus();
 
             result.add(dto);
         }
@@ -39,32 +35,40 @@ public class CoachController {
     }
 
     @GetMapping("/coach/{id}")
-    @ApiOperation("Получение полной информации о конкретном тренере.")
     public ResponseEntity<Coach> getById(@PathVariable UUID id) {
-        var coach = services.getById(id);
+        Optional<Coach> coach = services.getById(id);
         if (coach.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(coach.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/coach")
-    @ApiOperation("Добавление нового тренера.")
+    @PostMapping("/coach/add")
     public void createCoach(@RequestBody CoachDto dto) {
-        var coach = new Coach(dto.Id, dto.FirstName, dto.SecondName, 11);
+        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age);
         services.add(coach);
     }
 
-    @PutMapping("/coach")
-    @ApiOperation("Редактирование тренера.")
-    public Coach updateCoach() {
-        return services.getFullInfo();
+    @DeleteMapping("/coach/archived-status/{id}")
+    public void archiveCoach(@PathVariable UUID id, @RequestParam boolean archived) {
+        services.updateArchivedStatus(id, archived);
     }
 
-    @DeleteMapping("/coach/{id}")
-    @ApiOperation("Архивация информации о тренере.")
-    public void archiveCoach(@PathVariable UUID id) {
+    @PutMapping("/coach/update/{id}")
+    public void updateCoach(@PathVariable UUID id, @RequestBody CoachDto dto) {
+        Optional<Coach> coachOptional = services.getById(id);
 
-        //return services.getThirdCoach();
+        if (coachOptional.isPresent()) {
+            Coach coach = coachOptional.get();
+
+            // Обновляем все поля существующего тренера
+            coach.setFirstname(dto.Firstname);
+            coach.setSecondname(dto.Secondname);
+            coach.setAge(dto.Age);
+            coach.setBirthday(dto.Birthday);
+            coach.setPhoneNumber(dto.PhoneNumber);
+            coach.setEmail(dto.Email);
+            coach.setArchived(dto.Archived);
+        }
     }
 }

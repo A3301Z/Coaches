@@ -4,6 +4,8 @@ import java.util.UUID;
 
 public class CoachMinimalDto {
     public UUID Id;
-    public String FirstName;
-    public String SecondName;
+    public String Firstname;
+    public String Secondname;
+    public int Age;
+    public boolean Archived;
 }
