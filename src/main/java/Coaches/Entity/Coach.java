@@ -104,7 +104,7 @@ public class Coach {
         this.Id = id;
     }
 
-    public void setArchived(boolean archived) {
-        this.Archived = archived;
+    public void setArchived() {
+        this.Archived = true;
     }
 }

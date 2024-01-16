@@ -45,30 +45,17 @@ public class CoachController {
 
     @PostMapping("/coach/add")
     public void createCoach(@RequestBody CoachDto dto) {
-        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age);
+        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age, dto.Birthday, dto.PhoneNumber, dto.Email, dto.Archived);
         services.add(coach);
     }
 
     @DeleteMapping("/coach/archived-status/{id}")
-    public void archiveCoach(@PathVariable UUID id, @RequestParam boolean archived) {
-        services.updateArchivedStatus(id, archived);
+    public void archiveCoach(@PathVariable UUID id) {
+        services.updateArchivedStatus(id);
     }
 
     @PutMapping("/coach/update/{id}")
     public void updateCoach(@PathVariable UUID id, @RequestBody CoachDto dto) {
-        Optional<Coach> coachOptional = services.getById(id);
-
-        if (coachOptional.isPresent()) {
-            Coach coach = coachOptional.get();
-
-            // Обновляем все поля существующего тренера
-            coach.setFirstname(dto.Firstname);
-            coach.setSecondname(dto.Secondname);
-            coach.setAge(dto.Age);
-            coach.setBirthday(dto.Birthday);
-            coach.setPhoneNumber(dto.PhoneNumber);
-            coach.setEmail(dto.Email);
-            coach.setArchived(dto.Archived);
-        }
+        services.updateCoach(id, dto);
     }
 }

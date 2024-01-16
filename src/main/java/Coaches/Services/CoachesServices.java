@@ -1,7 +1,10 @@
 package Coaches.Services;
 
 import Coaches.Entity.Coach;
+import Coaches.Models.CoachDto;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -33,10 +36,24 @@ public class CoachesServices {
         return getAllCoaches().stream().filter(x -> x.getId().equals(id)).findFirst();
     }
 
-    public void updateArchivedStatus(UUID id, boolean archived) {
-        getById(id).ifPresent(coach -> coach.setArchived(archived));
+    public void updateArchivedStatus(UUID id) {
+        getById(id).ifPresent(coach -> coach.setArchived());
     }
+
     public void add(Coach coach) {
         coaches.add(coach);
+    }
+
+    public void updateCoach(UUID id, CoachDto dto) {
+        Optional<Coach> coachOptional = getById(id);
+        if (coachOptional.isPresent()) {
+            Coach coach = coachOptional.get();
+            coach.setFirstname(dto.Firstname);
+            coach.setSecondname(dto.Secondname);
+            coach.setAge(dto.Age);
+            coach.setBirthday(dto.Birthday);
+            coach.setPhoneNumber(dto.PhoneNumber);
+            coach.setEmail(dto.Email);
+        }
     }
 }
