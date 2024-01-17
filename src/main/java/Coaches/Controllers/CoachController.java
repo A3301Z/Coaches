@@ -43,7 +43,7 @@ public class CoachController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/coach/add")
+    @PostMapping("/coach")
     public void createCoach(@RequestBody CoachDto dto) {
         Coach coach = new Coach(dto.Id,
                 dto.Firstname,
@@ -57,7 +57,7 @@ public class CoachController {
         services.add(coach);
     }
 
-    @DeleteMapping("/coach/archived-status/{id}")
+    @DeleteMapping("/coach/{id}")
     public void archiveCoach(@PathVariable UUID id) {
 
         // TODO: следует обработать ситуацию если передан идентификатор тренера, которого нет
@@ -65,7 +65,7 @@ public class CoachController {
         services.updateArchivedStatus(id);
     }
 
-    @PutMapping("/coach/update")
+    @PutMapping("/coach")
     public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
         Coach coach = new Coach(dto.Id,
                 dto.Firstname,
