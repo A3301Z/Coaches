@@ -14,11 +14,14 @@ import java.util.*;
 
 @RestController
 public class CoachController {
-    @Autowired
-    private CoachesServices services;
+    private final CoachesServices services;
 
-    @GetMapping("/all-coaches")
-    public List<CoachMinimalDto> getAllCoaches() {
+    public CoachController(@Autowired CoachesServices services) {
+        this.services = services;
+    }
+
+    @GetMapping("/coach")
+    public List<CoachMinimalDto> getAll() {
         List<CoachMinimalDto> result = new ArrayList<>();
 
         for (Coach it : services.getAllCoaches()) {
@@ -58,11 +61,16 @@ public class CoachController {
     }
 
     @DeleteMapping("/coach/{id}")
-    public void archiveCoach(@PathVariable UUID id) {
+    public ResponseEntity<?> archiveCoach(@PathVariable UUID id) {
 
-        // TODO: следует обработать ситуацию если передан идентификатор тренера, которого нет
+        try
+        {
+            services.updateArchivedStatus(id);
+        } catch (CoachNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        services.updateArchivedStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/coach")

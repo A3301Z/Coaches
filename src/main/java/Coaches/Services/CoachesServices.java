@@ -37,8 +37,14 @@ public class CoachesServices {
         return getAllCoaches().stream().filter(x -> x.getId().equals(id)).findFirst();
     }
 
-    public void updateArchivedStatus(UUID id) {
-        getById(id).ifPresent(coach -> coach.setArchived());
+    public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
+        Optional<Coach> coachOptional = getById(id);
+
+        if (coachOptional.isPresent()) {
+            coachOptional.get().setArchived();
+        } else {
+            throw new CoachNotFoundException(String.format("Тренер с идентификатором %s не найден", id));
+        }
     }
 
     public void add(Coach coach) {
