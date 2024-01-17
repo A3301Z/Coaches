@@ -1,6 +1,7 @@
 package Coaches.Controllers;
 
 import Coaches.Entity.Coach;
+import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
 import Coaches.Models.CoachMinimalDto;
 import Coaches.Services.CoachesServices;
@@ -37,15 +38,22 @@ public class CoachController {
     @GetMapping("/coach/{id}")
     public ResponseEntity<Coach> getById(@PathVariable UUID id) {
         Optional<Coach> coach = services.getById(id);
-        if (coach.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(coach.get(), HttpStatus.OK);
+        return coach
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/coach/add")
     public void createCoach(@RequestBody CoachDto dto) {
-        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age, dto.Birthday, dto.PhoneNumber, dto.Email, dto.Archived);
+        Coach coach = new Coach(dto.Id,
+                dto.Firstname,
+                dto.Secondname,
+                dto.Age,
+                dto.Birthday,
+                dto.PhoneNumber,
+                dto.Email,
+                dto.Archived);
+
         services.add(coach);
     }
 
@@ -54,8 +62,24 @@ public class CoachController {
         services.updateArchivedStatus(id);
     }
 
-    @PutMapping("/coach/update/{id}")
-    public void updateCoach(@PathVariable UUID id, @RequestBody CoachDto dto) {
-        services.updateCoach(id, dto);
+    @PutMapping("/coach/update")
+    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
+        Coach coach = new Coach(dto.Id,
+                dto.Firstname,
+                dto.Secondname,
+                dto.Age,
+                dto.Birthday,
+                dto.PhoneNumber,
+                dto.Email,
+                dto.Archived);
+
+        try
+        {
+            services.updateCoach(coach);
+        } catch (CoachNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

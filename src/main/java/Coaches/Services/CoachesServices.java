@@ -1,6 +1,7 @@
 package Coaches.Services;
 
 import Coaches.Entity.Coach;
+import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,16 +45,19 @@ public class CoachesServices {
         coaches.add(coach);
     }
 
-    public void updateCoach(UUID id, CoachDto dto) {
-        Optional<Coach> coachOptional = getById(id);
+    public void updateCoach(Coach source) throws CoachNotFoundException {
+        Optional<Coach> coachOptional = getById(source.getId());
+
         if (coachOptional.isPresent()) {
-            Coach coach = coachOptional.get();
-            coach.setFirstname(dto.Firstname);
-            coach.setSecondname(dto.Secondname);
-            coach.setAge(dto.Age);
-            coach.setBirthday(dto.Birthday);
-            coach.setPhoneNumber(dto.PhoneNumber);
-            coach.setEmail(dto.Email);
+            Coach target = coachOptional.get();
+            target.setFirstname(source.getFirstname());
+            target.setSecondname(source.getSecondname());
+            target.setAge(source.getAge());
+            target.setBirthday(source.getBirthday());
+            target.setPhoneNumber(source.getPhoneNumber());
+            target.setEmail(source.getEmail());
+        } else {
+            throw new CoachNotFoundException(String.format("Тренер с идентификатором %s не найден", source.getId()));
         }
     }
 }
