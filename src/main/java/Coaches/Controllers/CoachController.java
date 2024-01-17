@@ -59,6 +59,9 @@ public class CoachController {
 
     @DeleteMapping("/coach/archived-status/{id}")
     public void archiveCoach(@PathVariable UUID id) {
+
+        // TODO: следует обработать ситуацию если передан идентификатор тренера, которого нет
+
         services.updateArchivedStatus(id);
     }
 
