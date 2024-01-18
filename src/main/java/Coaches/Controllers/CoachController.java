@@ -15,12 +15,15 @@ import java.util.*;
 
 @RestController
 public class CoachController {
-    @Autowired
-    private CoachesServices services;
+    private final CoachesServices services;
+
+    public CoachController(@Autowired CoachesServices services) {
+        this.services = services;
+    }
 
     @Tag(name="Получить неполную информацию о всех тренерах.")
     @GetMapping("/coaches")
-    public List<CoachMinimalDto> getAllCoaches() {
+    public List<CoachMinimalDto> getAll() {
         List<CoachMinimalDto> result = new ArrayList<>();
 
         for (Coach it : services.getAllCoaches()) {
@@ -58,6 +61,20 @@ public class CoachController {
                 dto.Archived);
 
         services.add(coach);
+    }
+
+    @Tag(name="Отправить тренера в архив.")
+    @DeleteMapping("/coach/{id}")
+    public ResponseEntity<?> archiveCoach(@PathVariable UUID id) {
+
+        try
+        {
+            services.updateArchivedStatus(id);
+        } catch (CoachNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Tag(name="Обновить поля существующего тренера.")
