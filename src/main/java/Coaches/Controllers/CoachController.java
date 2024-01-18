@@ -5,6 +5,7 @@ import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
 import Coaches.Models.CoachMinimalDto;
 import Coaches.Services.CoachesServices;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,12 @@ import java.util.*;
 
 @RestController
 public class CoachController {
-    private final CoachesServices services;
+    @Autowired
+    private CoachesServices services;
 
-    public CoachController(@Autowired CoachesServices services) {
-        this.services = services;
-    }
-
-    @GetMapping("/coach")
-    public List<CoachMinimalDto> getAll() {
+    @Tag(name="Получить неполную информацию о всех тренерах.")
+    @GetMapping("/coaches")
+    public List<CoachMinimalDto> getAllCoaches() {
         List<CoachMinimalDto> result = new ArrayList<>();
 
         for (Coach it : services.getAllCoaches()) {
@@ -37,7 +36,7 @@ public class CoachController {
 
         return result;
     }
-
+    @Tag(name="Получить детальную информацию о тренере.")
     @GetMapping("/coach/{id}")
     public ResponseEntity<Coach> getById(@PathVariable UUID id) {
         Optional<Coach> coach = services.getById(id);
@@ -46,6 +45,7 @@ public class CoachController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Tag(name="Добавить нового тренера.")
     @PostMapping("/coach")
     public void createCoach(@RequestBody CoachDto dto) {
         Coach coach = new Coach(dto.Id,
@@ -60,19 +60,7 @@ public class CoachController {
         services.add(coach);
     }
 
-    @DeleteMapping("/coach/{id}")
-    public ResponseEntity<?> archiveCoach(@PathVariable UUID id) {
-
-        try
-        {
-            services.updateArchivedStatus(id);
-        } catch (CoachNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
+    @Tag(name="Обновить поля существующего тренера.")
     @PutMapping("/coach")
     public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
         Coach coach = new Coach(dto.Id,
