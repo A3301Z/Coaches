@@ -18,22 +18,22 @@ public class Coach {
     boolean Archived;
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age) {
-        this.Id = Id;
-        this.Firstname = Firstname;
+        this.Id         = Id;
+        this.Firstname  = Firstname;
         this.Secondname = Secondname;
-        this.Age = Age;
+        this.Age        = Age;
     }
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
                  String Email, boolean Archived) {
-        this.Id = Id;
-        this.Firstname = Firstname;
-        this.Secondname = Secondname;
-        this.Age = Age;
-        this.Birthday = Birthday;
+        this.Id          = Id;
+        this.Firstname   = Firstname;
+        this.Secondname  = Secondname;
+        this.Age         = Age;
+        this.Birthday    = Birthday;
         this.PhoneNumber = PhoneNumber;
-        this.Email = Email;
-        this.Archived = Archived;
+        this.Email       = Email;
+        this.Archived    = Archived;
     }
 
     @JsonProperty("Id")

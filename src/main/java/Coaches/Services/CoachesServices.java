@@ -30,7 +30,10 @@ public class CoachesServices {
         LocalDate birthday = LocalDate.of(1998, Month.SEPTEMBER, 29);
         String phoneNumber = "+7(918) 888 77-99";
         String email = "coach@mail.com";
-        return new Coach(UUID.randomUUID(), three.getFirstname(), three.getSecondname(), three.getAge(), birthday, phoneNumber, email, three.getArchivedStatus());
+        return new Coach(UUID.randomUUID(), three.getFirstname(),
+                         three.getSecondname(), three.getAge(),
+                         birthday, phoneNumber, email,
+                         three.getArchivedStatus());
     }
 
     public Optional<Coach> getById(UUID id) {
@@ -38,32 +41,23 @@ public class CoachesServices {
     }
 
     public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
-        Optional<Coach> coachOptional = getById(id);
-
-        if (coachOptional.isPresent()) {
-            coachOptional.get().setArchived();
-        } else {
-            throw new CoachNotFoundException(String.format("Тренер с идентификатором %s не найден", id));
-        }
+        getById(id).ifPresent(Coach::setArchived);
     }
 
     public void add(Coach coach) {
         coaches.add(coach);
     }
 
-    public void updateCoach(Coach source) throws CoachNotFoundException {
-        Optional<Coach> coachOptional = getById(source.getId());
-
+    public void updateCoach(CoachDto dto) throws CoachNotFoundException {
+        Optional<Coach> coachOptional = getById(dto.Id);
         if (coachOptional.isPresent()) {
-            Coach target = coachOptional.get();
-            target.setFirstname(source.getFirstname());
-            target.setSecondname(source.getSecondname());
-            target.setAge(source.getAge());
-            target.setBirthday(source.getBirthday());
-            target.setPhoneNumber(source.getPhoneNumber());
-            target.setEmail(source.getEmail());
-        } else {
-            throw new CoachNotFoundException(String.format("Тренер с идентификатором %s не найден", source.getId()));
+            Coach coach = coachOptional.get();
+            coach.setFirstname(dto.Firstname);
+            coach.setSecondname(dto.Secondname);
+            coach.setAge(dto.Age);
+            coach.setBirthday(dto.Birthday);
+            coach.setPhoneNumber(dto.PhoneNumber);
+            coach.setEmail(dto.Email);
         }
     }
 }
