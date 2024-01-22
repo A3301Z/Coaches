@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 @RestController
@@ -51,8 +52,14 @@ public class CoachController {
     @Tag(name = "Добавить нового тренера.")
     @PostMapping("/coach")
     public void createCoach(@RequestBody CoachDto dto) {
-        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age, dto.Birthday, dto.PhoneNumber, dto.Email, dto.Archived);
-
+        Coach coach = new Coach(dto.Id,
+                                dto.Firstname,
+                                dto.Secondname,
+                                dto.Age,
+                                dto.Birthday,
+                                dto.Phonenumber,
+                                dto.Email,
+                                dto.Archived);
         services.add(coach);
     }
 
@@ -71,15 +78,8 @@ public class CoachController {
 
     @Tag(name = "Обновить поля существующего тренера.")
     @PutMapping("/coach")
-    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
-        Coach coach = new Coach(dto.Id, dto.Firstname, dto.Secondname, dto.Age, dto.Birthday, dto.PhoneNumber, dto.Email, dto.Archived);
-
-        try {
-            services.updateCoach(dto);
-        } catch (CoachNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) throws SQLException {
+        services.updateCoach(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

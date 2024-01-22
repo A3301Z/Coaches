@@ -4,36 +4,46 @@ import Coaches.Entity.Coach;
 import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDate;
-import java.time.Month;
+import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 @Service
 public class CoachesServices {
-    Coach one = new Coach(UUID.randomUUID(), "Regina", "Manuylova", 26);
-    Coach two = new Coach(UUID.randomUUID(), "Nikolay", "Korshunov", 29);
-    Coach three = new Coach(UUID.randomUUID(), "Kirill", "Sarychev", 40);
-
-    private List<Coach> coaches = new ArrayList<>(Arrays.asList(one, two, three));
-
     public CoachesServices() {
     }
 
     public List<Coach> getAllCoaches() {
-        return coaches;
-    }
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/coaches";
+        String username = "postgres";
+        String password = "0000";
 
-    public Coach getFullInfo() {
-        LocalDate birthday = LocalDate.of(1998, Month.SEPTEMBER, 29);
-        String phoneNumber = "+7(918) 888 77-99";
-        String email = "coach@mail.com";
-        return new Coach(UUID.randomUUID(), three.getFirstname(),
-                         three.getSecondname(), three.getAge(),
-                         birthday, phoneNumber, email,
-                         three.getArchivedStatus());
+        List<Coach> coachList = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+            String query = "SELECT * FROM coach";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                coachList.add(new Coach(UUID.fromString(resultSet.getString("id")),
+                                        resultSet.getString("firstname"),
+                                        resultSet.getString("secondname"),
+                                        resultSet.getInt("age"),
+                                        resultSet.getDate("birthday").toLocalDate(),
+                                        resultSet.getString("phonenumber"),
+                                        resultSet.getString("email"),
+                                        resultSet.getBoolean("archived")));
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return coachList;
     }
 
     public Optional<Coach> getById(UUID id) {
@@ -41,23 +51,83 @@ public class CoachesServices {
     }
 
     public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
-        getById(id).ifPresent(Coach::setArchived);
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/coaches";
+        String username = "postgres";
+        String password = "0000";
+        String updateQuery = "UPDATE coach SET archived = true WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+
+            statement.setObject(1, id);
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated == 0) {
+                throw new CoachNotFoundException("Тренер с id " + id + " не найден");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Не удалось обновить статус архивации", e);
+        }
     }
 
     public void add(Coach coach) {
-        coaches.add(coach);
+
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/coaches";
+        String username = "postgres";
+        String password = "0000";
+
+        String updateQuery =
+                "INSERT INTO coach (id, firstname, secondname, age, birthday, phonenumber, email, archived)\n" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+
+            statement.setObject(1, UUID.randomUUID());
+            statement.setString(2, coach.getFirstname());
+            statement.setString(3, coach.getSecondname());
+            statement.setInt(4, coach.getAge());
+            statement.setDate(5, Date.valueOf(coach.getBirthday()));
+            statement.setString(6, coach.getPhoneNumber());
+            statement.setString(7, coach.getEmail());
+            statement.setBoolean(8, coach.getArchivedStatus());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка добавления нового тренера.", e);
+        }
     }
 
-    public void updateCoach(CoachDto dto) throws CoachNotFoundException {
-        Optional<Coach> coachOptional = getById(dto.Id);
-        if (coachOptional.isPresent()) {
-            Coach coach = coachOptional.get();
-            coach.setFirstname(dto.Firstname);
-            coach.setSecondname(dto.Secondname);
-            coach.setAge(dto.Age);
-            coach.setBirthday(dto.Birthday);
-            coach.setPhoneNumber(dto.PhoneNumber);
-            coach.setEmail(dto.Email);
+    public void updateCoach(CoachDto coachDto) {
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/coaches";
+        String username = "postgres";
+        String password = "0000";
+
+        String sql = """
+                UPDATE coach SET
+                firstname = ?,
+                secondname = ?,
+                age = ?,
+                birthday = ?,
+                phonenumber = ?,
+                email = ?
+                WHERE id = ?""";
+
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setObject(7, coachDto.Id);
+            statement.setString(1, coachDto.Firstname);
+            statement.setString(2, coachDto.Secondname);
+            statement.setInt(3, coachDto.Age);
+            statement.setDate(4, Date.valueOf(coachDto.Birthday));
+            statement.setString(5, coachDto.Phonenumber);
+            statement.setString(6, coachDto.Email);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка добавления нового тренера.", e);
         }
     }
 }

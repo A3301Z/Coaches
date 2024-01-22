@@ -1,16 +1,13 @@
 package Coaches.Models;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 
 public class CoachDto extends CoachMinimalDto {
-    @NotBlank(message = "Email is mandatory")
     @jakarta.validation.constraints.Email
     public String Email;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     public LocalDate Birthday;
-
-    @NotBlank(message = "Phone number is mandatory")
-    public String PhoneNumber;
+    public String Phonenumber;
 }

@@ -1,12 +1,16 @@
 package Coaches.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@JsonPropertyOrder({"Id", "Firstname", "Secondname", "Age", "Birthday", "Phone-number", "Email", "Archived"})
+@JsonPropertyOrder({"Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived"})
 public class Coach {
     private UUID Id;
     private String Firstname;
@@ -17,6 +21,9 @@ public class Coach {
     String Email;
     boolean Archived;
 
+    public Coach() {
+    }
+
     public Coach(UUID Id, String Firstname, String Secondname, int Age) {
         this.Id         = Id;
         this.Firstname  = Firstname;
@@ -25,7 +32,7 @@ public class Coach {
     }
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-                 String Email, boolean Archived) {
+            String Email, boolean Archived) {
         this.Id          = Id;
         this.Firstname   = Firstname;
         this.Secondname  = Secondname;
@@ -57,11 +64,12 @@ public class Coach {
     }
 
     @JsonProperty("Birthday")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     public LocalDate getBirthday() {
         return Birthday;
     }
 
-    @JsonProperty("Phone-number")
+    @JsonProperty("Phonenumber")
     public String getPhoneNumber() {
         return PhoneNumber;
     }
@@ -106,5 +114,19 @@ public class Coach {
 
     public void setArchived() {
         this.Archived = true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                                     ID: %s
+                                     Имя: %s
+                                     Фамилия: %s
+                                     Возраст: %d
+                                     Дата рождения: %s
+                                     Телефон: %s
+                                     Имэйл: %s
+                                     Статус Архивации: %b
+                                     """, Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
     }
 }
