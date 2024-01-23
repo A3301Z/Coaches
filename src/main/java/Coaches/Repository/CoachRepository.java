@@ -12,14 +12,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class CoachRepository {
-    DatabaseConfig config = new DatabaseConfig();
     public List<Coach> getAllCoaches() {
 
         List<Coach> coachList = new ArrayList<>();
         String SELECT_COACH_FROM_DB = "SELECT * FROM coach";
-        try (Connection connection = DriverManager.getConnection(config.getUrl(),
-                                                                 config.getUsername(),
-                                                                 config.getPassword());
+        try (Connection connection = connect();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COACH_FROM_DB);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -46,9 +43,7 @@ public class CoachRepository {
     public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
 
         String UPDATE_ARCHIVED_STATUS_SQL = "UPDATE coach SET archived = true WHERE id = ?";
-        try (Connection connection = DriverManager.getConnection(config.getUrl(),
-                                                                 config.getUsername(),
-                                                                 config.getPassword());
+        try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ARCHIVED_STATUS_SQL)) {
 
             statement.setObject(1, id);
@@ -68,9 +63,7 @@ public class CoachRepository {
         String ADD_NEW_COACH_SQL =
                 "INSERT INTO coach (id, firstname, secondname, age, birthday, phonenumber, email, archived)\n" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-        try (Connection connection = DriverManager.getConnection(config.getUrl(),
-                                                                 config.getUsername(),
-                                                                 config.getPassword());
+        try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(ADD_NEW_COACH_SQL)) {
 
             statement.setObject(1, UUID.randomUUID());
@@ -99,9 +92,7 @@ public class CoachRepository {
                 phonenumber = ?,
                 email = ?
                 WHERE id = ?""";
-        try (Connection connection = DriverManager.getConnection(config.getUrl(),
-                                                                 config.getUsername(),
-                                                                 config.getPassword());
+        try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_COACH_FIELD)) {
 
             statement.setObject(7, coachDto.Id);
@@ -115,6 +106,19 @@ public class CoachRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка добавления нового тренера.", e);
+        }
+    }
+
+    public static Connection connect() {
+        DatabaseConfig databaseConfig = new DatabaseConfig();
+
+        try {
+            return DriverManager.getConnection(databaseConfig.getUrl(),
+                                               databaseConfig.getUsername(),
+                                               databaseConfig.getPassword());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Не удалось подключиться к БД.", e);
         }
     }
 }
