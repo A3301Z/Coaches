@@ -14,9 +14,10 @@ import java.util.*;
 @Service
 public class CoachesServices {
 
-    private final CoachRepository repository = new CoachRepository();
+    private CoachRepository repository;
 
-    public CoachesServices() {
+    public CoachesServices(@Autowired CoachRepository repository) {
+        this.repository = repository;
     }
 
     public List<Coach> getAllCoaches() {
@@ -37,5 +38,9 @@ public class CoachesServices {
 
     public void updateCoach(CoachDto coachDto) {
         repository.updateCoach(coachDto);
+    }
+
+    public void deleteById(UUID id) {
+        repository.deletedByID(id);
     }
 }

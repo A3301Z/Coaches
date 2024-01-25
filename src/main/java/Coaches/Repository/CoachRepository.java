@@ -1,17 +1,24 @@
 package Coaches.Repository;
 
-import Coaches.Components.DatabaseConfig;
 import Coaches.Entity.Coach;
 import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Component
 public class CoachRepository {
+    @Autowired
+    Environment environment;
+
     public List<Coach> getAllCoaches() {
 
         List<Coach> coachList = new ArrayList<>();
@@ -28,7 +35,7 @@ public class CoachRepository {
                                         resultSet.getDate("birthday").toLocalDate(),
                                         resultSet.getString("phonenumber"),
                                         resultSet.getString("email"),
-                                        resultSet.getBoolean("archived")));
+                                        resultSet.getTimestamp("archived")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,11 +49,17 @@ public class CoachRepository {
 
     public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
 
-        String UPDATE_ARCHIVED_STATUS_SQL = "UPDATE coach SET archived = true WHERE id = ?";
+        String UPDATE_ARCHIVED_STATUS_SQL = "UPDATE coach SET archived = ? WHERE id = ?";
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        java.sql.Timestamp sqlTimestamp = java.sql.Timestamp.valueOf(currentDateTime);
+
+
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ARCHIVED_STATUS_SQL)) {
 
-            statement.setObject(1, id);
+            statement.setObject(1, sqlTimestamp);
+            statement.setObject(2, id);
 
             int rowsUpdated = statement.executeUpdate();
 
@@ -73,7 +86,7 @@ public class CoachRepository {
             statement.setDate(5, Date.valueOf(coach.getBirthday()));
             statement.setString(6, coach.getPhoneNumber());
             statement.setString(7, coach.getEmail());
-            statement.setBoolean(8, coach.getArchivedStatus());
+            statement.setTimestamp(8, coach.getArchivedStatus());
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -109,15 +122,29 @@ public class CoachRepository {
         }
     }
 
-    public static Connection connect() {
-        DatabaseConfig databaseConfig = new DatabaseConfig();
+    public void deletedByID(UUID id) {
+        String DELETED_COACH = "DELETE FROM coach WHERE id = ?";
+
+        try (Connection connection = connect();
+             PreparedStatement statement = connection.prepareStatement(DELETED_COACH)) {
+            statement.setObject(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Ошибка удаления.", e);
+        }
+    }
+
+    public Connection connect() {
+
+        String url = environment.getProperty("db.url");
+        String name = environment.getProperty("db.username");
+        String pass = environment.getProperty("db.password");
 
         try {
-            return DriverManager.getConnection(databaseConfig.getUrl(),
-                                               databaseConfig.getUsername(),
-                                               databaseConfig.getPassword());
+            assert url != null;
+            return DriverManager.getConnection(url, name, pass);
+
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Не удалось подключиться к БД.", e);
         }
     }

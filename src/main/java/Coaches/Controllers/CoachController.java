@@ -82,4 +82,10 @@ public class CoachController {
         services.updateCoach(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Tag(name = "Удаление тренера из базы данных")
+    @DeleteMapping("/coach/delete/{id}")
+    public void deleteById(@PathVariable UUID id) {
+        services.deleteById(id);
+    }
 }

@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JsonPropertyOrder({"Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived"})
@@ -19,20 +18,10 @@ public class Coach {
     LocalDate Birthday;
     String PhoneNumber;
     String Email;
-    boolean Archived;
-
-    public Coach() {
-    }
-
-    public Coach(UUID Id, String Firstname, String Secondname, int Age) {
-        this.Id         = Id;
-        this.Firstname  = Firstname;
-        this.Secondname = Secondname;
-        this.Age        = Age;
-    }
+    Timestamp Archived;
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-            String Email, boolean Archived) {
+            String Email, Timestamp Archived) {
         this.Id          = Id;
         this.Firstname   = Firstname;
         this.Secondname  = Secondname;
@@ -80,40 +69,8 @@ public class Coach {
     }
 
     @JsonProperty("Archived")
-    public boolean getArchivedStatus() {
+    public Timestamp getArchivedStatus() {
         return Archived;
-    }
-
-    public void setFirstname(String firstname) {
-        this.Firstname = firstname;
-    }
-
-    public void setSecondname(String surname) {
-        this.Secondname = surname;
-    }
-
-    public void setAge(int age) {
-        this.Age = age;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.Birthday = birthday;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.PhoneNumber = phoneNumber;
-    }
-
-    public void setEmail(String email) {
-        this.Email = email;
-    }
-
-    public void setId(UUID id) {
-        this.Id = id;
-    }
-
-    public void setArchived() {
-        this.Archived = true;
     }
 
     @Override
