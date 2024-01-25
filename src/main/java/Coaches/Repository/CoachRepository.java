@@ -8,7 +8,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +39,7 @@ public class CoachRepository {
                                         resultSet.getDate("birthday").toLocalDate(),
                                         resultSet.getString("phonenumber"),
                                         resultSet.getString("email"),
-                                        resultSet.getTimestamp("archived")));
+                                        resultSet.getString("archived")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,18 +55,14 @@ public class CoachRepository {
 
         String UPDATE_ARCHIVED_STATUS_SQL = "UPDATE coach SET archived = ? WHERE id = ?";
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        java.sql.Timestamp sqlTimestamp = java.sql.Timestamp.valueOf(currentDateTime);
-
-
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ARCHIVED_STATUS_SQL)) {
 
-            statement.setObject(1, sqlTimestamp);
+            statement.setObject(1, getDateTime());
             statement.setObject(2, id);
 
             int rowsUpdated = statement.executeUpdate();
-
+            System.out.println(getDateTime());
             if (rowsUpdated == 0) {
                 throw new CoachNotFoundException("Тренер с id " + id + " не найден");
             }
@@ -86,7 +86,7 @@ public class CoachRepository {
             statement.setDate(5, Date.valueOf(coach.getBirthday()));
             statement.setString(6, coach.getPhoneNumber());
             statement.setString(7, coach.getEmail());
-            statement.setTimestamp(8, coach.getArchivedStatus());
+            statement.setString(8, coach.getArchivedStatus());
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -103,18 +103,20 @@ public class CoachRepository {
                 age = ?,
                 birthday = ?,
                 phonenumber = ?,
-                email = ?
+                email = ?,
+                archived = ?
                 WHERE id = ?""";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(UPDATE_COACH_FIELD)) {
 
-            statement.setObject(7, coachDto.Id);
+            statement.setObject(8, coachDto.Id);
             statement.setString(1, coachDto.Firstname);
             statement.setString(2, coachDto.Secondname);
             statement.setInt(3, coachDto.Age);
             statement.setDate(4, Date.valueOf(coachDto.Birthday));
             statement.setString(5, coachDto.Phonenumber);
             statement.setString(6, coachDto.Email);
+            statement.setString(7, coachDto.Archived);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -147,5 +149,19 @@ public class CoachRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Не удалось подключиться к БД.", e);
         }
+    }
+
+    public String getDateTime() {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        ZoneId zoneId = ZoneId.of("Europe/Moscow");
+        LocalDateTime localDateTime = timestamp.toLocalDateTime();
+        LocalDateTime localDateTimeWithTimeZone = localDateTime.atZone(zoneId).toLocalDateTime();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm:ss)");
+        String formattedDateTime = localDateTimeWithTimeZone.format(formatter);
+
+        LocalDateTime parsedLocalDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+        return parsedLocalDateTime.toString();
     }
 }

@@ -17,10 +17,10 @@ public class Coach {
     LocalDate Birthday;
     String PhoneNumber;
     String Email;
-    Timestamp Archived;
+    String Archived;
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-            String Email, Timestamp Archived) {
+            String Email, String Archived) {
         this.Id          = Id;
         this.Firstname   = Firstname;
         this.Secondname  = Secondname;
@@ -68,7 +68,7 @@ public class Coach {
     }
 
     @JsonProperty("Archived")
-    public Timestamp getArchivedStatus() {
+    public String getArchivedStatus() {
         return Archived;
     }
 

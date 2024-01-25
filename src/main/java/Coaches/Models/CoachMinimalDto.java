@@ -8,5 +8,5 @@ public class CoachMinimalDto {
     public String Firstname;
     public String Secondname;
     public int Age;
-    public Timestamp Archived;
+    public String Archived;
 }
