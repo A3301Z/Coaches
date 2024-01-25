@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.sql.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JsonPropertyOrder({"Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived"})
 public class Coach {
-    private UUID Id;
-    private String Firstname;
-    private String Secondname;
-    private int Age;
+    private final UUID Id;
+    private final String Firstname;
+    private final String Secondname;
+    private final int Age;
     LocalDate Birthday;
     String PhoneNumber;
     String Email;
