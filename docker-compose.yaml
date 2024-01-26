@@ -7,8 +7,12 @@ services:
       - 'POSTGRES_DB=coaches'
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=0000'
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     ports:
-      - "5432:5433"
+      - "5432:5432"
+    networks:
+      - backend
 
   app:
     build: /.
@@ -16,11 +20,19 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - 'DB_URL=jdbc:jdbc:postgresql://postgres:5432/coaches'
+      - 'DB_URL=jdbc:postgresql://postgres:5432/coaches'
       - 'DB_USERNAME=postgres'
       - 'DB_PASSWORD=0000'
     depends_on:
       - postgres
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  pg-data:
 
 #version: '3'
 #services:

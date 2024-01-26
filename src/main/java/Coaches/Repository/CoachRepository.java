@@ -86,7 +86,7 @@ public class CoachRepository {
             statement.setDate(5, Date.valueOf(coach.getBirthday()));
             statement.setString(6, coach.getPhoneNumber());
             statement.setString(7, coach.getEmail());
-            statement.setString(8, coach.getArchivedStatus());
+            statement.setString(8, null);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -116,7 +116,7 @@ public class CoachRepository {
             statement.setDate(4, Date.valueOf(coachDto.Birthday));
             statement.setString(5, coachDto.Phonenumber);
             statement.setString(6, coachDto.Email);
-            statement.setString(7, coachDto.Archived);
+            statement.setString(7, null);
             statement.executeUpdate();
 
         } catch (SQLException e) {
