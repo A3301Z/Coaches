@@ -17,18 +17,18 @@ public class Coach {
     LocalDate Birthday;
     String PhoneNumber;
     String Email;
-    String Archived;
+    Timestamp Archived;
 
     public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-            String Email, String Archived) {
-        this.Id          = Id;
-        this.Firstname   = Firstname;
-        this.Secondname  = Secondname;
-        this.Age         = Age;
-        this.Birthday    = Birthday;
+                 String Email, Timestamp Archived) {
+        this.Id = Id;
+        this.Firstname = Firstname;
+        this.Secondname = Secondname;
+        this.Age = Age;
+        this.Birthday = Birthday;
         this.PhoneNumber = PhoneNumber;
-        this.Email       = Email;
-        this.Archived    = Archived;
+        this.Email = Email;
+        this.Archived = Archived;
     }
 
     @JsonProperty("Id")
@@ -68,21 +68,21 @@ public class Coach {
     }
 
     @JsonProperty("Archived")
-    public String getArchivedStatus() {
+    public Timestamp getArchivedStatus() {
         return Archived;
     }
 
     @Override
     public String toString() {
         return String.format("""
-                                     ID: %s
-                                     Имя: %s
-                                     Фамилия: %s
-                                     Возраст: %d
-                                     Дата рождения: %s
-                                     Телефон: %s
-                                     Имэйл: %s
-                                     Статус Архивации: %b
-                                     """, Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
+                ID: %s
+                Имя: %s
+                Фамилия: %s
+                Возраст: %d
+                Дата рождения: %s
+                Телефон: %s
+                Имэйл: %s
+                Статус Архивации: %b
+                """, Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
     }
 }

@@ -8,11 +8,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +18,11 @@ import java.util.UUID;
 
 @Component
 public class CoachRepository {
-    @Autowired
-    Environment environment;
+    private final Environment environment;
+
+    public CoachRepository(@Autowired Environment environment) {
+        this.environment = environment;
+    }
 
     public List<Coach> getAllCoaches() {
 
@@ -33,16 +34,16 @@ public class CoachRepository {
 
             while (resultSet.next()) {
                 coachList.add(new Coach(UUID.fromString(resultSet.getString("id")),
-                                        resultSet.getString("firstname"),
-                                        resultSet.getString("secondname"),
-                                        resultSet.getInt("age"),
-                                        resultSet.getDate("birthday").toLocalDate(),
-                                        resultSet.getString("phonenumber"),
-                                        resultSet.getString("email"),
-                                        resultSet.getString("archived")));
+                        resultSet.getString("firstname"),
+                        resultSet.getString("secondname"),
+                        resultSet.getInt("age"),
+                        resultSet.getDate("birthday").toLocalDate(),
+                        resultSet.getString("phonenumber"),
+                        resultSet.getString("email"),
+                        resultSet.getTimestamp("archived")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка подключения к БД.", e);
         }
         return coachList;
     }
@@ -86,7 +87,7 @@ public class CoachRepository {
             statement.setDate(5, Date.valueOf(coach.getBirthday()));
             statement.setString(6, coach.getPhoneNumber());
             statement.setString(7, coach.getEmail());
-            statement.setString(8, coach.getArchivedStatus());
+            statement.setTimestamp(8, coach.getArchivedStatus());
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -116,7 +117,7 @@ public class CoachRepository {
             statement.setDate(4, Date.valueOf(coachDto.Birthday));
             statement.setString(5, coachDto.Phonenumber);
             statement.setString(6, coachDto.Email);
-            statement.setString(7, coachDto.Archived);
+            statement.setTimestamp(7, coachDto.Archived);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -151,17 +152,9 @@ public class CoachRepository {
         }
     }
 
-    public String getDateTime() {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-        ZoneId zoneId = ZoneId.of("Europe/Moscow");
-        LocalDateTime localDateTime = timestamp.toLocalDateTime();
-        LocalDateTime localDateTimeWithTimeZone = localDateTime.atZone(zoneId).toLocalDateTime();
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm:ss)");
-        String formattedDateTime = localDateTimeWithTimeZone.format(formatter);
-
-        LocalDateTime parsedLocalDateTime = LocalDateTime.parse(formattedDateTime, formatter);
-        return parsedLocalDateTime.toString();
+    public Timestamp getDateTime() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        ZonedDateTime utcDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("UTC"));
+        return Timestamp.valueOf(utcDateTime.toLocalDateTime());
     }
 }
