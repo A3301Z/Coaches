@@ -3,6 +3,9 @@ package Coaches.Repository;
 import Coaches.Entity.Coach;
 import Coaches.Exceptions.CoachNotFoundException;
 import Coaches.Models.CoachDto;
+import Coaches.SQL_Queries.Queries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,7 @@ import java.util.UUID;
 
 @Component
 public class CoachRepository {
+    private static final Logger logger = LoggerFactory.getLogger(CoachRepository.class);
     private final Environment environment;
 
     public CoachRepository(@Autowired Environment environment) {
@@ -27,9 +31,8 @@ public class CoachRepository {
     public List<Coach> getAllCoaches() {
 
         List<Coach> coachList = new ArrayList<>();
-        String SELECT_COACH_FROM_DB = "SELECT * FROM coach";
         try (Connection connection = connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COACH_FROM_DB);
+             PreparedStatement preparedStatement = connection.prepareStatement(Queries.SELECT_COACH_FROM_DB.getQuery());
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -43,42 +46,39 @@ public class CoachRepository {
                         resultSet.getTimestamp("archived")));
             }
         } catch (SQLException e) {
+            logger.error("Ошибка получения списка тренеров. Метод: getAllCoaches", e);
             throw new RuntimeException("Ошибка подключения к БД.", e);
         }
+        logger.info("Список тренеров успешно получен. Метод: getAllCoaches \n");
         return coachList;
     }
 
     public Optional<Coach> getById(UUID id) {
+        logger.info("Тренер с id {} найден. Метод: getById", id);
         return getAllCoaches().stream().filter(x -> x.getId().equals(id)).findFirst();
     }
 
     public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
-
-        String UPDATE_ARCHIVED_STATUS_SQL = "UPDATE coach SET archived = ? WHERE id = ?";
-
         try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_ARCHIVED_STATUS_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(Queries.UPDATE_ARCHIVED_STATUS_SQL.getQuery())) {
 
             statement.setObject(1, getDateTime());
             statement.setObject(2, id);
 
             int rowsUpdated = statement.executeUpdate();
-            System.out.println(getDateTime());
             if (rowsUpdated == 0) {
+                logger.error("Тренер с id {} не найден. Метод: updateArchivedStatus", id);
                 throw new CoachNotFoundException("Тренер с id " + id + " не найден");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Не удалось обновить статус архивации", e);
+            logger.error("Не удалось обновить статус архивации.", e);
         }
+        logger.info("Тренер успешно отправлен в архив. Метод: updateArchivedStatus \n");
     }
 
     public void add(Coach coach) {
-
-        String ADD_NEW_COACH_SQL =
-                "INSERT INTO coach (id, firstname, secondname, age, birthday, phonenumber, email, archived)\n" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
         try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(ADD_NEW_COACH_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(Queries.ADD_NEW_COACH_SQL.getQuery())) {
 
             statement.setObject(1, UUID.randomUUID());
             statement.setString(2, coach.getFirstname());
@@ -91,24 +91,14 @@ public class CoachRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления нового тренера.", e);
+            logger.info("Ошибка добавления тренера.", e);
         }
+        logger.info("Тренер успешно добавлен. Метод: add \n");
     }
 
     public void updateCoach(CoachDto coachDto) {
-
-        String UPDATE_COACH_FIELD = """
-                UPDATE coach SET
-                firstname = ?,
-                secondname = ?,
-                age = ?,
-                birthday = ?,
-                phonenumber = ?,
-                email = ?,
-                archived = ?
-                WHERE id = ?""";
         try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_COACH_FIELD)) {
+             PreparedStatement statement = connection.prepareStatement(Queries.UPDATE_COACH_FIELD.getQuery())) {
 
             statement.setObject(8, coachDto.Id);
             statement.setString(1, coachDto.Firstname);
@@ -121,20 +111,20 @@ public class CoachRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка добавления нового тренера.", e);
+            logger.error("Ошибка обновления полей тренера.", e);
         }
+        logger.info("Поля тренера успешно обновлены. Метод: updateCoach \n");
     }
 
     public void deletedByID(UUID id) {
-        String DELETED_COACH = "DELETE FROM coach WHERE id = ?";
-
         try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(DELETED_COACH)) {
+             PreparedStatement statement = connection.prepareStatement(Queries.DELETED_COACH.getQuery())) {
             statement.setObject(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка удаления.", e);
+            logger.error("Ошибка удаления.", e);
         }
+        logger.info("Тренер успешно удален. Метод: deletedByID \n");
     }
 
     public Connection connect() {
@@ -142,14 +132,16 @@ public class CoachRepository {
         String url = environment.getProperty("db.url");
         String name = environment.getProperty("db.username");
         String pass = environment.getProperty("db.password");
-
+        logger.info("Попытка подключения к БД.");
         try {
             assert url != null;
+            logger.info("Соединение с БД установлено.");
             return DriverManager.getConnection(url, name, pass);
 
         } catch (SQLException e) {
-            throw new RuntimeException("Не удалось подключиться к БД.", e);
+            logger.error("Не удалось подключиться к БД.", e);
         }
+        return null;
     }
 
     public Timestamp getDateTime() {

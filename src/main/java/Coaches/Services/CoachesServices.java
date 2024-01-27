@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class CoachesServices {
 
-    private CoachRepository repository;
+    private final CoachRepository repository;
 
     public CoachesServices(@Autowired CoachRepository repository) {
         this.repository = repository;
