@@ -14,33 +14,34 @@ import java.util.UUID;
 @Service
 public class CoachesServices {
 
-    private final CoachRepository repository;
+	private final CoachRepository repository;
 
-    public CoachesServices(@Autowired CoachRepository repository) {
-        this.repository = repository;
-    }
+	public CoachesServices(@Autowired
+	CoachRepository repository) {
+		this.repository = repository;
+	}
 
-    public List<Coach> getAllCoaches() {
-        return repository.getAllCoaches();
-    }
+	public List<Coach> getAllCoaches() {
+		return repository.getAllCoaches();
+	}
 
-    public Optional<Coach> getById(UUID id) {
-        return repository.getById(id);
-    }
+	public Optional<Coach> getById(UUID id) {
+		return repository.getById(id);
+	}
 
-    public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
-        repository.updateArchivedStatus(id);
-    }
+	public void updateArchivedStatus(UUID id) throws CoachNotFoundException {
+		repository.updateArchivedStatus(id);
+	}
 
-    public void add(Coach coach) {
-        repository.add(coach);
-    }
+	public void add(Coach coach) {
+		repository.add(coach);
+	}
 
-    public void updateCoach(CoachDto coachDto) {
-        repository.updateCoach(coachDto);
-    }
+	public void updateCoach(CoachDto coachDto) {
+		repository.updateCoach(coachDto);
+	}
 
-    public void deleteById(UUID id) {
-        repository.deletedByID(id);
-    }
+	public void deleteById(UUID id) {
+		repository.deletedByID(id);
+	}
 }

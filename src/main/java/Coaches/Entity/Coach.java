@@ -8,81 +8,88 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@JsonPropertyOrder({"Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived"})
+@JsonPropertyOrder({ "Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived" })
 public class Coach {
-    private final UUID Id;
-    private final String Firstname;
-    private final String Secondname;
-    private final int Age;
-    LocalDate Birthday;
-    String PhoneNumber;
-    String Email;
-    Timestamp Archived;
+	private final UUID Id;
 
-    public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-                 String Email, Timestamp Archived) {
-        this.Id = Id;
-        this.Firstname = Firstname;
-        this.Secondname = Secondname;
-        this.Age = Age;
-        this.Birthday = Birthday;
-        this.PhoneNumber = PhoneNumber;
-        this.Email = Email;
-        this.Archived = Archived;
-    }
+	private final String Firstname;
 
-    @JsonProperty("Id")
-    public UUID getId() {
-        return Id;
-    }
+	private final String Secondname;
 
-    @JsonProperty("Firstname")
-    public String getFirstname() {
-        return Firstname;
-    }
+	private final int Age;
 
-    @JsonProperty("Secondname")
-    public String getSecondname() {
-        return Secondname;
-    }
+	LocalDate Birthday;
 
-    @JsonProperty("Age")
-    public int getAge() {
-        return Age;
-    }
+	String PhoneNumber;
 
-    @JsonProperty("Birthday")
-    @JsonFormat(pattern = "dd.MM.yyyy")
-    public LocalDate getBirthday() {
-        return Birthday;
-    }
+	String Email;
 
-    @JsonProperty("Phonenumber")
-    public String getPhoneNumber() {
-        return PhoneNumber;
-    }
+	Timestamp Archived;
 
-    @JsonProperty("Email")
-    public String getEmail() {
-        return Email;
-    }
+	public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
+			String Email, Timestamp Archived) {
+		this.Id = Id;
+		this.Firstname = Firstname;
+		this.Secondname = Secondname;
+		this.Age = Age;
+		this.Birthday = Birthday;
+		this.PhoneNumber = PhoneNumber;
+		this.Email = Email;
+		this.Archived = Archived;
+	}
 
-    @JsonProperty("Archived")
-    public Timestamp getArchivedStatus() {
-        return Archived;
-    }
+	@JsonProperty("Id")
+	public UUID getId() {
+		return Id;
+	}
 
-    @Override
-    public String toString() {
-        return String.format("""
-                ID: %s
-                Имя: %s
-                Фамилия: %s
-                Возраст: %d
-                Дата рождения: %s
-                Телефон: %s
-                Имэйл: %s
-                Статус Архивации: %b
-                """, Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
-    }
+	@JsonProperty("Firstname")
+	public String getFirstname() {
+		return Firstname;
+	}
+
+	@JsonProperty("Secondname")
+	public String getSecondname() {
+		return Secondname;
+	}
+
+	@JsonProperty("Age")
+	public int getAge() {
+		return Age;
+	}
+
+	@JsonProperty("Birthday")
+	@JsonFormat(pattern = "dd.MM.yyyy")
+	public LocalDate getBirthday() {
+		return Birthday;
+	}
+
+	@JsonProperty("Phonenumber")
+	public String getPhoneNumber() {
+		return PhoneNumber;
+	}
+
+	@JsonProperty("Email")
+	public String getEmail() {
+		return Email;
+	}
+
+	@JsonProperty("Archived")
+	public Timestamp getArchivedStatus() {
+		return Archived;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("""
+				ID: %s
+				Имя: %s
+				Фамилия: %s
+				Возраст: %d
+				Дата рождения: %s
+				Телефон: %s
+				Имэйл: %s
+				Статус Архивации: %b
+				""", Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
+	}
 }
