@@ -78,7 +78,7 @@ public class CoachController {
 
     @Tag(name = "Обновить поля существующего тренера.")
     @PutMapping("/coach")
-    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) throws SQLException {
+    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
         services.updateCoach(dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
