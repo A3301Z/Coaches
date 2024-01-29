@@ -30,7 +30,15 @@ public class CoachRepository {
 		this.environment = environment;
 	}
 
+<<<<<<< HEAD
 	public List<Coach> getAllCoaches() {
+=======
+        List<Coach> coachList = new ArrayList<>();
+        String SELECT_COACH_FROM_DB = "SELECT * FROM coach";
+        try (Connection connection = connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(Queries.SELECT_COACH_FROM_DB.getQuery());
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+>>>>>>> debe8b8d77e56364885b10b637a0336656d8de1d
 
 		List<Coach> coachList = new ArrayList<>();
 		try (Connection connection = connect();
@@ -63,8 +71,21 @@ public class CoachRepository {
 				PreparedStatement statement = connection
 						.prepareStatement(Queries.UPDATE_ARCHIVED_STATUS_SQL.getQuery())) {
 
+<<<<<<< HEAD
 			statement.setObject(1, getDateTime());
 			statement.setObject(2, id);
+=======
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println(getDateTime());
+            if (rowsUpdated == 0) {
+                logger.error("Тренер с id {} не найден. Метод: updateArchivedStatus", id);
+                throw new CoachNotFoundException("Тренер с id " + id + " не найден");
+            }
+        } catch (SQLException e) {
+            logger.error("Не удалось обновить статус архивации.", e);
+        }
+    }
+>>>>>>> debe8b8d77e56364885b10b637a0336656d8de1d
 
 			int rowsUpdated = statement.executeUpdate();
 			if (rowsUpdated == 0) {

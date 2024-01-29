@@ -7,8 +7,6 @@ services:
       - 'POSTGRES_DB=coaches_Docker'
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=0000'
-    volumes:
-      - pg-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -21,7 +19,11 @@ services:
     ports:
       - "8080:8080"
     environment:
+<<<<<<< HEAD
       - 'DB_URL=jdbc:postgresql://postgres:5432/coaches_Docker'
+=======
+      - 'DB_URL=jdbc:jdbc:postgresql://postgres:5432/coaches'
+>>>>>>> debe8b8d77e56364885b10b637a0336656d8de1d
       - 'DB_USERNAME=postgres'
       - 'DB_PASSWORD=0000'
     depends_on:
@@ -34,3 +36,23 @@ networks:
 
 volumes:
   pg-data:
+
+#version: '3'
+#services:
+#  postgres:
+#    image: 'postgres:latest'
+#    container_name: 'coaches_postgres'
+#    environment:
+#      - 'POSTGRES_DB=coaches'
+#      - 'POSTGRES_USER=postgres'
+#      - 'POSTGRES_PASSWORD=0000'
+#
+#  app:
+#    build: /.
+#    container_name: 'java-app'
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - 'DB_URL=jdbc:jdbc:postgresql://localhost:5432/coaches'
+#      - 'DB_USERNAME=postgres'
+#      - 'DB_PASSWORD=0000'
