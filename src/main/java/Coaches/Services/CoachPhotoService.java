@@ -15,14 +15,8 @@ public class CoachPhotoService {
         this.photoRepository = photoRepository;
     }
 
-    public void add(UUID coachId, String fileName, byte[] content) throws Exception {
-        var alreadyUploaded = this.photoRepository.isFileAlreadyUploaded(coachId, fileName);
-
-        if (!alreadyUploaded) {
-            this.photoRepository.add(coachId, fileName, content);
-        } else {
-            throw new Exception("Файл с таким именем уже был загружен");
-        }
+    public void add(UUID coachId, String fileName, byte[] content, boolean isMain) {
+        this.photoRepository.add(coachId, fileName, content, isMain);
     }
 
     public byte[] getMainPhoto(UUID id) {

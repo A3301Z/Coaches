@@ -19,11 +19,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-<<<<<<< HEAD
       - 'DB_URL=jdbc:postgresql://postgres:5432/coaches_Docker'
-=======
-      - 'DB_URL=jdbc:jdbc:postgresql://postgres:5432/coaches'
->>>>>>> debe8b8d77e56364885b10b637a0336656d8de1d
       - 'DB_USERNAME=postgres'
       - 'DB_PASSWORD=0000'
     depends_on:
