@@ -36,33 +36,54 @@ public class CoachPhotoRepository {
     public void add(UUID coachId, String fileName, byte[] content, boolean is_main) {
 
         String info = "Фото успешно добавлено\n";
+        Connection connection = null;
 
         if (isFileAlreadyUploaded(coachId, fileName)) {
-            throw new RuntimeException(String.format("Фото с именем %s уже существует.\n", fileName));
+            throw new RuntimeException(String.format("Фото с именем \"%s\" уже существует.\n", fileName));
         } else {
-            try (Connection connection = connect();
-                 PreparedStatement statement = connection.prepareStatement(Queries.ADD_PHOTO.getQuery())) {
+            try {
+                connection = connect();
+                PreparedStatement statement = connection.prepareStatement(Queries.ADD_PHOTO.getQuery());
+
+                connection.setAutoCommit(false); // Отключаю автоматический коммит запроса.
 
                 if (is_main) {
-                    logger.info("Отправка запроса на изменение статуса старого фото.\n");
-                    PreparedStatement statement_2 = connection.prepareStatement(Queries.DO_ALL_NOT_MAIN.getQuery());
-                    statement_2.setObject(1, coachId);
-                    statement_2.executeUpdate();
-                    logger.info("Статус is_main старого фото успешно изменен.\n");
-                    info = "Главное фото успешно добавлено.\n";
+                    try (PreparedStatement statement_2 = connection.prepareStatement(
+                            Queries.DO_ALL_NOT_MAIN.getQuery())) {
+
+                        logger.info("Отправка запроса на изменение статуса старого фото.\n");
+                        statement_2.setObject(1, coachId);
+                        statement_2.executeUpdate();
+                        logger.info("Статус is_main старого фото успешно изменен.\n");
+                        info = "Главное фото успешно добавлено.\n";
+                    }
                 }
+
                 statement.setObject(1, UUID.randomUUID());
                 statement.setObject(2, coachId);
                 statement.setString(3, fileName);
                 statement.setBytes(4, content);
                 statement.setBoolean(5, is_main);
                 statement.executeUpdate();
+
+                connection.commit(); //завершаю отправку обоих запросов одновременно
+
             } catch (SQLException e) {
-                logger.error("Ошибка добавления фотографии тренера.\n");
-                throw new RuntimeException("Ошибка добавления фотографии тренера.\n", e);
+                try {
+                    connection.rollback();
+                } catch (SQLException e2){
+                    logger.error("Ошибка добавления фотографии тренера.\n");
+                    throw new RuntimeException("Ошибка добавления фотографии тренера.\n", e);
+                } finally {
+                    try {
+                        connection.close();
+                    } catch (SQLException closeException) {
+                        logger.error("Ошибка при попытке закрыть подключение к БД.", e);
+                    }
+
+                }
             }
-        }
-        logger.info(info);
+        } logger.info(info);
     }
 
     public byte[] getMainPhoto(UUID coach_id) {
