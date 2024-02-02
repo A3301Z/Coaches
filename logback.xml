@@ -1,0 +1,46 @@
+<configuration>
+    <property name="LOG_DIR" value="C:/Users/3301/Desktop/Coaches/Logs" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/coaches.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/coaches.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
+
+        <!--<configuration>-->
+        <!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+        <!--        <encoder>-->
+        <!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <!--        </encoder>-->
+        <!--    </appender>-->
+
+        <!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+        <!--        <file>C:\Users\3301\Desktop\Coaches\coaches.log</file>-->
+        <!--        <encoder>-->
+        <!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <!--        </encoder>-->
+        <!--    </appender>-->
+
+        <!--    <root level="info">-->
+        <!--        <appender-ref ref="CONSOLE"/>-->
+        <!--        <appender-ref ref="FILE"/>-->
+        <!--    </root>-->
+        <!--</configuration>-->
