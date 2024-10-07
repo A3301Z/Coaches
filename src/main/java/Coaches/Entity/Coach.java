@@ -1,95 +1,64 @@
 package Coaches.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import Coaches.persistence.Models.CoachDto;
+
+import lombok.Builder;
+import lombok.Getter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@JsonPropertyOrder({ "Id", "Firstname", "Secondname", "Age", "Birthday", "Phonenumber", "Email", "Archived" })
+@Getter
+@Builder
+@Table("Coaches")
 public class Coach {
-	private final UUID Id;
 
-	private final String Firstname;
+	@Id
+	private UUID id;
 
-	private final String Secondname;
+	@Column("lastname")
+	private String lastname;
 
-	private final int Age;
+	@Column("firstname")
+	private String firstname;
 
-	LocalDate Birthday;
+	@Column("surname")
+	private String surname;
 
-	String PhoneNumber;
+	@Column("age")
+	private int age;
 
-	String Email;
+	@Column("birthday")
+	private LocalDate birthday;
 
-	Timestamp Archived;
+	@Column("phone_number")
+	private String phoneNumber;
 
-	public Coach(UUID Id, String Firstname, String Secondname, int Age, LocalDate Birthday, String PhoneNumber,
-			String Email, Timestamp Archived) {
-		this.Id = Id;
-		this.Firstname = Firstname;
-		this.Secondname = Secondname;
-		this.Age = Age;
-		this.Birthday = Birthday;
-		this.PhoneNumber = PhoneNumber;
-		this.Email = Email;
-		this.Archived = Archived;
+	@Column("email")
+	private String email;
+
+	@Column("is_archived")
+	private boolean isArchived;
+
+	@Column("archived")
+	private Timestamp archivingTime;
+
+	public static Coach toCoach(CoachDto coachDto) {
+		return Coach.builder()
+				.lastname(coachDto.lastname)
+				.firstname(coachDto.firstname)
+				.surname(coachDto.surname)
+				.age(coachDto.age)
+				.birthday(coachDto.birthday)
+				.phoneNumber(coachDto.phoneNumber)
+				.email(coachDto.email)
+				.isArchived(coachDto.isArchived)
+				.archivingTime(coachDto.archivingTime)
+				.build();
 	}
 
-	@JsonProperty("Id")
-	public UUID getId() {
-		return Id;
-	}
-
-	@JsonProperty("Firstname")
-	public String getFirstname() {
-		return Firstname;
-	}
-
-	@JsonProperty("Secondname")
-	public String getSecondname() {
-		return Secondname;
-	}
-
-	@JsonProperty("Age")
-	public int getAge() {
-		return Age;
-	}
-
-	@JsonProperty("Birthday")
-	@JsonFormat(pattern = "dd.MM.yyyy")
-	public LocalDate getBirthday() {
-		return Birthday;
-	}
-
-	@JsonProperty("Phonenumber")
-	public String getPhoneNumber() {
-		return PhoneNumber;
-	}
-
-	@JsonProperty("Email")
-	public String getEmail() {
-		return Email;
-	}
-
-	@JsonProperty("Archived")
-	public Timestamp getArchivedStatus() {
-		return Archived;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("""
-				ID: %s
-				Имя: %s
-				Фамилия: %s
-				Возраст: %d
-				Дата рождения: %s
-				Телефон: %s
-				Имэйл: %s
-				Статус Архивации: %b
-				""", Id, Firstname, Secondname, Age, Birthday, PhoneNumber, Email, Archived);
-	}
 }
