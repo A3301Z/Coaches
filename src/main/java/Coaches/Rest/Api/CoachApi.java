@@ -1,7 +1,7 @@
 package Coaches.Rest.Api;
 
-import Coaches.persistence.Models.CoachDto;
-import Coaches.persistence.Models.CoachMinimalDto;
+import Coaches.persistence.models.CoachDto;
+import Coaches.persistence.models.CoachMinimalDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;

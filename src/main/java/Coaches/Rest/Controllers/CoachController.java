@@ -3,8 +3,8 @@ package Coaches.Rest.Controllers;
 import Coaches.Rest.Api.CoachApi;
 import Coaches.Services.CoachPhotoService;
 import Coaches.Services.CoachService;
-import Coaches.persistence.Models.CoachDto;
-import Coaches.persistence.Models.CoachMinimalDto;
+import Coaches.persistence.models.CoachDto;
+import Coaches.persistence.models.CoachMinimalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

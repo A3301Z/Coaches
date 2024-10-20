@@ -1,7 +1,6 @@
 package Coaches.Repository;
 
 import Coaches.Entity.Coach;
-import ch.qos.logback.core.net.server.Client;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,5 @@
 package Coaches.Services;
 
-import Coaches.Repository.CoachPhotoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
