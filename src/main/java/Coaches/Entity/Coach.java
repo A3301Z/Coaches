@@ -1,6 +1,6 @@
 package Coaches.Entity;
 
-import Coaches.persistence.Models.CoachDto;
+import Coaches.persistence.models.CoachDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 @Builder
-@Table("Coaches")
+@Table("coaches")
 public class Coach {
 
 	@Id
@@ -44,7 +44,7 @@ public class Coach {
 	@Column("is_archived")
 	private boolean isArchived;
 
-	@Column("archived")
+	@Column("archiving_time")
 	private Timestamp archivingTime;
 
 	public static Coach toCoach(CoachDto coachDto) {

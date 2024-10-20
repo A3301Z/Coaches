@@ -2,16 +2,15 @@ package Coaches.Services;
 
 import Coaches.Entity.Coach;
 import Coaches.Exceptions.NotFoundException;
-import Coaches.persistence.Models.CoachDto;
+import Coaches.persistence.models.CoachDto;
 import Coaches.Repository.CoachRepository;
-import Coaches.persistence.Models.CoachMinimalDto;
+import Coaches.persistence.models.CoachMinimalDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
