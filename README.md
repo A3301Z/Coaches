@@ -19,9 +19,11 @@
 - **Spring Boot**
 - **PostgreSQL**
 - **Spring JDBC**
-- **JSon**
+- **Jackson**
 - **Spring MVC**
 - **Docker**
+- **SLF4J**
+- **Liquibase**
 
 ## Endpoints
 
