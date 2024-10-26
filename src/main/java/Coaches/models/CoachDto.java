@@ -1,4 +1,4 @@
-package Coaches.persistence.models;
+package Coaches.models;
 
 import Coaches.persistence.entity.Coach;
 import com.fasterxml.jackson.annotation.JsonFormat;

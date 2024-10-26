@@ -1,13 +1,32 @@
 package Coaches.services.impl;
 
-import Coaches.persistence.models.CreateCoachDto;
+import Coaches.models.CreateCoachDto;
+import Coaches.persistence.repository.CoachRepository;
 import Coaches.services.CoachValidationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class CoachValidationServiceImpl implements CoachValidationService {
 
+    private final CoachRepository coachRepository;
+
     public boolean isDuplicate(CreateCoachDto createCoachDto) {
-        return false;
+        log.debug("#isDuplicate: createCoachDto = {}", createCoachDto);
+
+        return coachRepository.findCoachByFields(
+                        createCoachDto.lastname,
+                        createCoachDto.firstname,
+                        createCoachDto.surname,
+                        createCoachDto.email,
+                        createCoachDto.phoneNumber,
+                        createCoachDto.age
+                )
+                .map(CreateCoachDto::toCreateCoachDto)
+                .map(createCoachDto::equals)
+                .orElse(false);
     }
 }

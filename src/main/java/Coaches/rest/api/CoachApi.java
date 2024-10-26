@@ -1,8 +1,8 @@
 package Coaches.rest.api;
 
-import Coaches.persistence.models.CoachDto;
-import Coaches.persistence.models.CoachMinimalDto;
-import Coaches.persistence.models.CreateCoachDto;
+import Coaches.models.CoachDto;
+import Coaches.models.CoachMinimalDto;
+import Coaches.models.CreateCoachDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

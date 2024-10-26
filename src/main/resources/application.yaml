@@ -1,6 +1,16 @@
 server:
   port: 8030
 
+logging:
+  level:
+    Coaches: debug
+    liquibase: error
+    hikari: debug
+    root: error
+    org.springframework: error
+    org.apache.catalina: error
+
+
 spring:
   datasource:
     url: ${DATABASE_URL}
