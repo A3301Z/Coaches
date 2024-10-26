@@ -17,7 +17,7 @@ services:
     build: /.
     container_name: 'coaches_service'
     ports:
-      - "8080:8080"
+      - "8030:8030"
     environment:
       - 'DB_URL=jdbc:postgresql://postgres:5432/coaches'
       - 'DB_USERNAME=postgres'

@@ -1,13 +1,12 @@
-package Coaches.Rest.Api;
+package Coaches.rest.api;
 
 import Coaches.persistence.models.CoachDto;
 import Coaches.persistence.models.CoachMinimalDto;
+import Coaches.persistence.models.CreateCoachDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,13 +17,17 @@ public interface CoachApi {
 
     @Operation(summary = "Добавить")
     @PostMapping(value = "/coach")
-    void addCoach(@RequestBody CoachDto coachDto);
+    void addCoach(@RequestBody CreateCoachDto createCoachDto);
 
-    @Operation(summary = "Получить полную информацию о тренере")
+    @Operation(summary = "Получить полную информацию")
     @GetMapping(value = "/coach/{id}")
-    CoachDto getFullInfo(UUID id);
+    CoachDto getFullInfo(@PathVariable UUID id);
 
     @Operation(summary = "Получить список всех тренеров")
     @GetMapping(value = "/all")
     List<CoachMinimalDto> getAll();
+
+    @Operation(summary = "Отправить в архив")
+    @PutMapping(value = "/archiving/{id}")
+    ResponseEntity<?> updateArchivingStatus(@PathVariable UUID id);
 }

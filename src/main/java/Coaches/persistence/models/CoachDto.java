@@ -1,10 +1,10 @@
 package Coaches.persistence.models;
 
-import Coaches.Entity.Coach;
+import Coaches.persistence.entity.Coach;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -12,57 +12,35 @@ import java.util.UUID;
  * Объект содержащий полную информацию о тренере
  */
 @Builder
+@Schema(description = "Dto тренера")
 public class CoachDto {
 
-    /**
-     * Уникальный идентификатор тренера
-     */
+    @Schema(description = "Id", example = "'UUID'")
     public UUID id;
 
-    /**
-     * Фамилия
-     */
+    @Schema(description = "Фамилия", example = "Петренко")
     public String lastname;
 
-    /**
-     * Имя
-     */
+    @Schema(description = "Имя", example = "Петр")
     public String firstname;
 
-    /**
-     * Отчество
-     */
+    @Schema(description = "Отчество", example = "Петрович")
     public String surname;
 
-    /**
-     * Возраст
-     */
+    @Schema(description = "Возраст", example = "25")
     public int age;
 
-    /**
-     * Заархивирован ли профиль тренера? true/false
-     */
+    @Schema(description = "Статус архивации", example = "false")
     public boolean isArchived;
 
-    /**
-     * Время архивации профиля тренера
-     */
-    public Timestamp archivingTime;
-
-    /**
-     * Тренер в архиве
-     */
+    @Schema(description = "Email", example = "coach@gmail.com")
     public String email;
 
-    /**
-     * Тренер в архиве
-     */
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @Schema(description = "Дата рождения")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     public LocalDate birthday;
 
-    /**
-     * Тренер в архиве
-     */
+    @Schema(description = "Номер телефона", example = "89883717322")
     public String phoneNumber;
 
     public static CoachDto toCoachDto(Coach coach) {
@@ -75,7 +53,6 @@ public class CoachDto {
                 .phoneNumber(coach.getPhoneNumber())
                 .email(coach.getEmail())
                 .isArchived(coach.isArchived())
-                .archivingTime(coach.getArchivingTime())
                 .build();
     }
 }
