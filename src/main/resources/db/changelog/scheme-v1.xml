@@ -5,31 +5,47 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Создание расширения uuid-ossp, если его еще нет -->
-    <changeSet id="20102024-add-extension-for-auto-generate-uuid" author="3301">
-        <sql>CREATE EXTENSION IF NOT EXISTS "uuid-oosp";</sql>
+    <changeSet id="0" author="yourname">
+        <sql>CREATE EXTENSION IF NOT EXISTS "pgcrypto";</sql>
     </changeSet>
 
     <!-- Генерация таблицы для сущности тренера -->
     <changeSet id="20102024-add-coaches-table" author="3301">
         <createTable tableName="coaches">
-            <column name="id" type="UUID">
+
+            <column name="id" type="UUID" generationType="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="lastname" type="VARCHAR(255)"/>
-            <column name="firstname" type="VARCHAR(255)"/>
-            <column name="surname" type="VARCHAR(255)"/>
-            <column name="age" type="INT"/>
-            <column name="birthday" type="DATE"/>
-            <column name="phone_number" type="VARCHAR(255)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="is_archived" type="BOOLEAN"/>
-            <column name="archiving_time" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
 
-    <changeSet id="20102024-auto-generate-coach-id-uuid" author="3301">
-        <addDefaultValue tableName="coaches" columnName="id" defaultValueComputed="uuid_generate_v4()"/>
+            <column name="lastname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="firstname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="age" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="birthday" type="DATE"/>
+            <column name="phone_number" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="is_archived" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addDefaultValue tableName="coaches" columnName="id" defaultValueComputed="gen_random_uuid()"/>
     </changeSet>
 
 </databaseChangeLog>

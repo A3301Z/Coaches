@@ -1,14 +1,13 @@
-package Coaches.Entity;
+package Coaches.persistence.entity;
 
 import Coaches.persistence.models.CoachDto;
-
+import Coaches.persistence.models.CreateCoachDto;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -44,9 +43,6 @@ public class Coach {
 	@Column("is_archived")
 	private boolean isArchived;
 
-	@Column("archiving_time")
-	private Timestamp archivingTime;
-
 	public static Coach toCoach(CoachDto coachDto) {
 		return Coach.builder()
 				.lastname(coachDto.lastname)
@@ -57,7 +53,19 @@ public class Coach {
 				.phoneNumber(coachDto.phoneNumber)
 				.email(coachDto.email)
 				.isArchived(coachDto.isArchived)
-				.archivingTime(coachDto.archivingTime)
+				.build();
+	}
+
+	public static Coach toCoach(CreateCoachDto coachDto) {
+		return Coach.builder()
+				.lastname(coachDto.lastname)
+				.firstname(coachDto.firstname)
+				.surname(coachDto.surname)
+				.age(coachDto.age)
+				.birthday(coachDto.birthday)
+				.phoneNumber(coachDto.phoneNumber)
+				.email(coachDto.email)
+				.isArchived(coachDto.isArchived)
 				.build();
 	}
 

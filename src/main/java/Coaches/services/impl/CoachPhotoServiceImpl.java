@@ -1,11 +1,9 @@
-package Coaches.Services;
+package Coaches.services.impl;
 
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
-public class CoachPhotoService {
+public class CoachPhotoServiceImpl {
 
 //    private final CoachPhotoRepository photoRepository;
 //

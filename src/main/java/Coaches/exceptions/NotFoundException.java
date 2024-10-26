@@ -1,7 +1,7 @@
-package Coaches.Exceptions;
+package Coaches.exceptions;
 
 /**
- * Исключение для ситуации, если тренер не найден
+ * Исключение для ситуации, когда сущность не найдена
  */
 public class NotFoundException extends RuntimeException {
 	public NotFoundException(String message) {
