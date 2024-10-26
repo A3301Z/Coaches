@@ -1,8 +1,8 @@
 package Coaches.rest.controllers;
 
-import Coaches.persistence.models.CoachDto;
-import Coaches.persistence.models.CoachMinimalDto;
-import Coaches.persistence.models.CreateCoachDto;
+import Coaches.models.CoachDto;
+import Coaches.models.CoachMinimalDto;
+import Coaches.models.CreateCoachDto;
 import Coaches.rest.api.CoachApi;
 import Coaches.services.impl.CoachServiceImpl;
 import lombok.RequiredArgsConstructor;

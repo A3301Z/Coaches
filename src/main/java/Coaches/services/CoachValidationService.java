@@ -1,6 +1,6 @@
 package Coaches.services;
 
-import Coaches.persistence.models.CreateCoachDto;
+import Coaches.models.CreateCoachDto;
 
 /**
  * Сервис валидации тренеров

@@ -1,4 +1,4 @@
-package Coaches.repository;
+package Coaches.persistence.repository;
 
 import Coaches.persistence.entity.Coach;
 import org.springframework.data.repository.CrudRepository;
