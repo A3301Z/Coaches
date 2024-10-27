@@ -29,7 +29,7 @@ public class CreateCoachDto {
     public int age;
 
     @Schema(description = "Статус архивации", example = "false")
-    public boolean isArchived;
+    public boolean archivedStatus;
 
     @Schema(description = "Email", example = "coach@gmail.com")
     public String email;
@@ -50,7 +50,20 @@ public class CreateCoachDto {
                 .birthday(coach.getBirthday())
                 .phoneNumber(coach.getPhoneNumber())
                 .email(coach.getEmail())
-                .isArchived(coach.isArchived())
+                .archivedStatus(coach.isArchivedStatus())
+                .build();
+    }
+
+    public static CreateCoachDto toCreateCoachDto(CoachDto coachDto) {
+        return CreateCoachDto.builder()
+                .lastname(coachDto.getLastname())
+                .firstname(coachDto.getFirstname())
+                .surname(coachDto.getSurname())
+                .age(coachDto.getAge())
+                .birthday(coachDto.getBirthday())
+                .phoneNumber(coachDto.getPhoneNumber())
+                .email(coachDto.getEmail())
+                .archivedStatus(coachDto.isArchivedStatus())
                 .build();
     }
 }

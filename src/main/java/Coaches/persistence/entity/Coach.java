@@ -3,7 +3,7 @@ package Coaches.persistence.entity;
 import Coaches.models.CoachDto;
 import Coaches.models.CreateCoachDto;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Getter
+@Data
 @Builder
 @Table("coaches")
 public class Coach {
@@ -41,7 +41,7 @@ public class Coach {
 	private String email;
 
 	@Column("is_archived")
-	private boolean isArchived;
+	private boolean archivedStatus;
 
 	public static Coach toCoach(CoachDto coachDto) {
 		return Coach.builder()
@@ -52,7 +52,7 @@ public class Coach {
 				.birthday(coachDto.birthday)
 				.phoneNumber(coachDto.phoneNumber)
 				.email(coachDto.email)
-				.isArchived(coachDto.isArchived)
+				.archivedStatus(coachDto.archivedStatus)
 				.build();
 	}
 
@@ -65,7 +65,21 @@ public class Coach {
 				.birthday(coachDto.birthday)
 				.phoneNumber(coachDto.phoneNumber)
 				.email(coachDto.email)
-				.isArchived(coachDto.isArchived)
+				.archivedStatus(coachDto.archivedStatus)
+				.build();
+	}
+
+	public static Coach toCoachForUpdating(CoachDto coachDto) {
+		return Coach.builder()
+				.id(coachDto.id)
+				.lastname(coachDto.lastname)
+				.firstname(coachDto.firstname)
+				.surname(coachDto.surname)
+				.age(coachDto.age)
+				.birthday(coachDto.birthday)
+				.phoneNumber(coachDto.phoneNumber)
+				.email(coachDto.email)
+				.archivedStatus(coachDto.archivedStatus)
 				.build();
 	}
 

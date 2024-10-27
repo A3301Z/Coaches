@@ -4,6 +4,7 @@ import Coaches.persistence.entity.Coach;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 /***
  * Объект содержащий полную информацию о тренере
  */
+@Data
 @Builder
 @Schema(description = "Dto тренера")
 public class CoachDto {
@@ -31,7 +33,7 @@ public class CoachDto {
     public int age;
 
     @Schema(description = "Статус архивации", example = "false")
-    public boolean isArchived;
+    public boolean archivedStatus;
 
     @Schema(description = "Email", example = "coach@gmail.com")
     public String email;
@@ -45,6 +47,7 @@ public class CoachDto {
 
     public static CoachDto toCoachDto(Coach coach) {
         return CoachDto.builder()
+                .id(coach.getId())
                 .lastname(coach.getLastname())
                 .firstname(coach.getFirstname())
                 .surname(coach.getSurname())
@@ -52,7 +55,7 @@ public class CoachDto {
                 .birthday(coach.getBirthday())
                 .phoneNumber(coach.getPhoneNumber())
                 .email(coach.getEmail())
-                .isArchived(coach.isArchived())
+                .archivedStatus(coach.isArchivedStatus())
                 .build();
     }
 }

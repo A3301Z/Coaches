@@ -19,6 +19,10 @@ public interface CoachApi {
     @PostMapping(value = "/coach")
     void addCoach(@RequestBody CreateCoachDto createCoachDto);
 
+    @Operation(summary = "Обновить")
+    @PostMapping(value = "/coach/update")
+    void update(@RequestBody CoachDto coachDto);
+
     @Operation(summary = "Получить полную информацию")
     @GetMapping(value = "/coach/{id}")
     CoachDto getFullInfo(@PathVariable UUID id);
