@@ -37,13 +37,10 @@ public class CoachController implements CoachApi {
     public ResponseEntity<?> updateArchivingStatus(UUID id) {
         return coachService.updateArchivingStatus(id);
     }
-//
-//    @Tag(name = "Обновить поля существующего тренера.")
-//    @PutMapping("/coach")
-//    public ResponseEntity<?> updateCoach(@RequestBody CoachDto dto) {
-//        coachesServices.updateCoach(dto);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+
+    public void update(CoachDto coachDto) {
+        coachService.updateCoach(coachDto);
+    }
 //
 //    @Tag(name = "Удаление тренера из базы данных")
 //    @DeleteMapping("/coach/delete/{id}")

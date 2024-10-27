@@ -1,5 +1,6 @@
 package Coaches.services.impl;
 
+import Coaches.models.CoachDto;
 import Coaches.models.CreateCoachDto;
 import Coaches.persistence.repository.CoachRepository;
 import Coaches.services.CoachValidationService;

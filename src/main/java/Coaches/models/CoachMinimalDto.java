@@ -29,15 +29,16 @@ public class CoachMinimalDto {
     public int age;
 
     @Schema(description = "Статус архивации", example = "false")
-    public boolean isArchived;
+    public boolean archivedStatus;
 
     public static CoachMinimalDto toCoachMinimalDto(Coach coach) {
         return CoachMinimalDto.builder()
+                .id(coach.getId())
                 .lastname(coach.getLastname())
                 .firstname(coach.getFirstname())
                 .surname(coach.getSurname())
                 .age(coach.getAge())
-                .isArchived(coach.isArchived())
+                .archivedStatus(coach.isArchivedStatus())
                 .build();
     }
 }
