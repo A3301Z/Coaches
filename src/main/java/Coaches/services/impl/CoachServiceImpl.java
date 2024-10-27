@@ -36,12 +36,6 @@ public class CoachServiceImpl implements CoachService {
                 .ifPresentOrElse(coachRepository::save, () -> {
                     throw new CoachDuplicateException("Конфликт: попытка сохранить дубликат");
                 });
-//
-//        // Проверка на дубликат
-//        if (coachValidationService.isDuplicate(createCoachDto)) {
-//            throw new CoachDuplicateException("Конфликт: попытка сохранить дубликат");
-//        }
-//        coachRepository.save(Coach.toCoach(createCoachDto));
     }
 
     public CoachDto getFullInfo(UUID id) {
@@ -62,9 +56,7 @@ public class CoachServiceImpl implements CoachService {
     public ResponseEntity<String> updateArchivingStatus(UUID id) {
         log.debug("#updateArchivingStatus: id = {}", id);
 
-        boolean success = toggleArchivedStatus(id);
-
-        return success ?
+        return toggleArchivedStatus(id) ?
                 ResponseEntity.ok("Статус успешно обновлен") :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body("Тренер с указанным ID не найден");
 

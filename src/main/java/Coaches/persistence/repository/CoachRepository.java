@@ -1,6 +1,7 @@
 package Coaches.persistence.repository;
 
 import Coaches.persistence.entity.Coach;
+import lombok.NonNull;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Repository
 public interface CoachRepository extends CrudRepository<Coach, UUID> {
 
+    @NonNull
     @Query("select * from coaches")
     List<Coach> findAll();
 

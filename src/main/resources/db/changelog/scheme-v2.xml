@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="27102024" author="3301">
+        <sql>CREATE EXTENSION IF NOT EXISTS "pgcrypto";</sql>
+    </changeSet>
+
+    <!-- Генерация таблицы для сущности тренера -->
+    <changeSet id="20102024-create-coach-photo-table" author="3301">
+        <createTable tableName="content">
+
+            <column name="id" type="UUID" generationType="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="coachId" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_coaches_id"
+                             referencedTableName="coaches"
+                             referencedColumnNames="id"/>
+            </column>
+
+            <column name="is_main" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addDefaultValue tableName="content" columnName="id" defaultValueComputed="gen_random_uuid()"/>
+    </changeSet>
+
+</databaseChangeLog>
