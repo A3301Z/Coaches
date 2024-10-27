@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,7 +32,19 @@ public interface CoachApi {
     @GetMapping(value = "/all")
     List<CoachMinimalDto> getAll();
 
-    @Operation(summary = "Отправить в архив")
+    @Operation(summary = "Обновить статус архивации")
     @PutMapping(value = "/archiving/{id}")
     ResponseEntity<?> updateArchivingStatus(@PathVariable UUID id);
+
+    @Operation(summary = "Удаление профиля")
+    @DeleteMapping(value = "delete/{id}")
+    void deleteById(@PathVariable UUID id);
+
+    @Operation(summary = "Сохранить главное фото")
+    @PostMapping(value = "/coach/{id}/saveContent", consumes = "multipart/from-data")
+    void saveContent(
+            @RequestParam MultipartFile content,
+            @PathVariable UUID id,
+            @RequestParam boolean isMain
+    );
 }
