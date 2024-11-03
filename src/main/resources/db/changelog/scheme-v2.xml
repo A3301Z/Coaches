@@ -17,12 +17,16 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="coachId" type="UUID">
+            <column name="coach_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_coaches_id"
                              referencedTableName="coaches"
                              referencedColumnNames="id"/>
             </column>
+
+            <column name="file_name" type="VARCHAR(255)"/>
+
+            <column name="photo" type="BYTEA"/>
 
             <column name="is_main" type="BOOLEAN">
                 <constraints nullable="false"/>

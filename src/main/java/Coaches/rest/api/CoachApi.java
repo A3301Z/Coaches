@@ -5,6 +5,7 @@ import Coaches.models.CoachMinimalDto;
 import Coaches.models.CreateCoachDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,10 +42,14 @@ public interface CoachApi {
     void deleteById(@PathVariable UUID id);
 
     @Operation(summary = "Сохранить главное фото")
-    @PostMapping(value = "/coach/{id}/saveContent", consumes = "multipart/from-data")
+    @PostMapping(value = "/coach/{coachId}/saveContent", consumes = "multipart/form-data")
     void saveContent(
             @RequestParam MultipartFile content,
-            @PathVariable UUID id,
+            @PathVariable UUID coachId,
             @RequestParam boolean isMain
     );
+
+    @Operation(summary = "Получить главное фото тренера")
+    @GetMapping(value = "/coach/{coachId}/mainPhoto", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody byte[] getMainPhoto(@PathVariable UUID coachId);
 }
