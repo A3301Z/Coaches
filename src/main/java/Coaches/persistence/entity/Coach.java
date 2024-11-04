@@ -1,7 +1,7 @@
 package Coaches.persistence.entity;
 
-import Coaches.models.CoachDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CoachDto;
+import Coaches.models.Coach.CreateCoachDto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

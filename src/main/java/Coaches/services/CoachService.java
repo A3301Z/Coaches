@@ -1,8 +1,8 @@
 package Coaches.services;
 
-import Coaches.models.CoachDto;
-import Coaches.models.CoachMinimalDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CoachDto;
+import Coaches.models.Coach.CoachMinimalDto;
+import Coaches.models.Coach.CreateCoachDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

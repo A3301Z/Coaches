@@ -1,14 +1,13 @@
 package Coaches.rest.controllers;
 
-import Coaches.models.CoachDto;
-import Coaches.models.CoachMinimalDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CoachDto;
+import Coaches.models.Coach.CoachMinimalDto;
+import Coaches.models.Coach.CreateCoachDto;
 import Coaches.rest.api.CoachApi;
 import Coaches.services.impl.CoachPhotoServiceImpl;
 import Coaches.services.impl.CoachServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +19,6 @@ import java.util.UUID;
 public class CoachController implements CoachApi {
 
     private final CoachServiceImpl coachService;
-    private final CoachPhotoServiceImpl coachPhotoService;
 
     @Override
     public void addCoach(CreateCoachDto createCoachDto) {
@@ -50,15 +48,5 @@ public class CoachController implements CoachApi {
     @Override
     public void deleteById(UUID id) {
         this.coachService.deleteById(id);
-    }
-
-    @Override
-    public void saveContent(MultipartFile file, UUID id, boolean is_main) {
-        this.coachPhotoService.saveContent(id, file, is_main);
-    }
-
-    @Override
-    public byte[] getMainPhoto(UUID coachId) {
-        return this.coachPhotoService.getMainPhoto(coachId);
     }
 }

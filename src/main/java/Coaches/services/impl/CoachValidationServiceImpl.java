@@ -1,7 +1,6 @@
 package Coaches.services.impl;
 
-import Coaches.models.CoachDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CreateCoachDto;
 import Coaches.persistence.repository.CoachRepository;
 import Coaches.services.CoachValidationService;
 import lombok.RequiredArgsConstructor;

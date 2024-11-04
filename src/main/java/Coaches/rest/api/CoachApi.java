@@ -1,8 +1,8 @@
 package Coaches.rest.api;
 
-import Coaches.models.CoachDto;
-import Coaches.models.CoachMinimalDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CoachDto;
+import Coaches.models.Coach.CoachMinimalDto;
+import Coaches.models.Coach.CreateCoachDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -40,16 +40,4 @@ public interface CoachApi {
     @Operation(summary = "Удаление профиля")
     @DeleteMapping(value = "delete/{id}")
     void deleteById(@PathVariable UUID id);
-
-    @Operation(summary = "Сохранить главное фото")
-    @PostMapping(value = "/coach/{coachId}/saveContent", consumes = "multipart/form-data")
-    void saveContent(
-            @RequestParam MultipartFile content,
-            @PathVariable UUID coachId,
-            @RequestParam boolean isMain
-    );
-
-    @Operation(summary = "Получить главное фото тренера")
-    @GetMapping(value = "/coach/{coachId}/mainPhoto", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody byte[] getMainPhoto(@PathVariable UUID coachId);
 }

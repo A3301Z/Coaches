@@ -2,9 +2,9 @@ package Coaches.services.impl;
 
 import Coaches.exceptions.CoachDuplicateException;
 import Coaches.exceptions.NotFoundException;
-import Coaches.models.CoachDto;
-import Coaches.models.CoachMinimalDto;
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CoachDto;
+import Coaches.models.Coach.CoachMinimalDto;
+import Coaches.models.Coach.CreateCoachDto;
 import Coaches.persistence.entity.Coach;
 import Coaches.persistence.repository.CoachRepository;
 import Coaches.services.CoachService;
