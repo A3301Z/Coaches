@@ -32,6 +32,8 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="timestamp" type="TIMESTAMP"/>
+
         </createTable>
 
         <addDefaultValue tableName="content" columnName="id" defaultValueComputed="gen_random_uuid()"/>

@@ -1,6 +1,6 @@
 package Coaches.services;
 
-import Coaches.models.CreateCoachDto;
+import Coaches.models.Coach.CreateCoachDto;
 
 /**
  * Сервис валидации тренеров

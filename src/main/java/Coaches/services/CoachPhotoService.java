@@ -16,4 +16,10 @@ public interface CoachPhotoService {
      * @param file - передаваемый файл
      */
     void saveContent(UUID coachId, MultipartFile file, boolean isMain);
+
+    /**
+     * Метод для сохранения фотографий тренера
+     * @param coachId - идентификатор тренера
+     */
+    byte[] getMainPhoto(UUID coachId);
 }

@@ -1,17 +1,17 @@
 package Coaches.persistence.repository;
 
-import Coaches.persistence.entity.Coach;
+import Coaches.persistence.entity.Content;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Repository
-public interface CoachPhotoRepository extends CrudRepository<Coach, UUID> {
+public interface CoachPhotoRepository extends CrudRepository<Content, UUID> {
 
     /**
      * Метод для сохранения фотографий тренера
@@ -22,10 +22,10 @@ public interface CoachPhotoRepository extends CrudRepository<Coach, UUID> {
      */
     @Modifying
     @Query("""
-           insert into content (coach_id, photo, is_main, file_name)
-           values (:coachId, :content, :isMain, :fileName)
+           insert into content (coach_id, photo, is_main, file_name, timestamp)
+           values (:coachId, :content, :isMain, :fileName, :fileSavingDateTime)
            """)
-    void saveContent(UUID coachId, String fileName, byte[] content, boolean isMain);
+    void saveContent(UUID coachId, String fileName, byte[] content, boolean isMain, LocalDateTime fileSavingDateTime);
 
     /**
      * Сделать предыдущее фото не главным, если сохранено новое фото с флагом isMain = true
@@ -41,6 +41,6 @@ public interface CoachPhotoRepository extends CrudRepository<Coach, UUID> {
     /**
      * Получить главное фото тренера
      */
-    @Query("select photo from content where coach_id = :coachId")
-    byte[] getMainPhoto(UUID coachId);
+    @Query("select * from content where coach_id = :coachId")
+    Content getMainPhoto(UUID coachId);
 }
